@@ -597,22 +597,19 @@ void add_new_librarian()
 			center("nobox","Please try another combination",12);
 			center("box","Press any key to retry : ",13);
 			wait=getch();
-			break;
-		}
-		else
-		{
-			l.input();
-			file.write((char*)&l,sizeof(l));
-			cout<<"Press any key to continue";
-			wait=getch();
-			break;
+			return;
 		}
 	}
+	l.input();
+	file.write((char*)&l,sizeof(l));
+	cout<<"Press any key to continue";
+	wait=getch();
 	file.close();
 }
 
 void add_new_book()
 {
+	clrscr();
 	book b;
 	char wait;
 	char book_added_name[20];
@@ -628,17 +625,13 @@ void add_new_book()
 			cout<<"Book already exists";
 			cout<<"Press any key to retry";
 			wait=getch();
-			break;
-		}
-		else
-		{
-			b.input();
-			file.write((char*)&b,sizeof(b));
-			cout<<"Press any key to continue";
-			wait=getch();
-			break;
+			return;
 		}
 	}
+	b.input();
+	file.write((char*)&b,sizeof(b));
+	cout<<"Press any key to continue";
+	wait=getch();
 	file.close();
 }
 
@@ -660,17 +653,13 @@ void add_new_member()
 			cout<<"Memeber already exists";
 			cout<<"Press any key to retry";
 			wait=getch();
-			break;
-		}
-		else
-		{
-			m.input();
-			file.write((char*)&m,sizeof(m));
-			cout<<"Press any key to continue";
-			wait=getch();
-			break;
+			return;
 		}
 	}
+	m.input();
+	file.write((char*)&m,sizeof(m));
+	cout<<"Press any key to continue";
+	wait=getch();
 	file.close();
 }
 
@@ -1269,12 +1258,12 @@ void book_report()
 	book b;
 	clrscr();
 	border('*','.',0,0,80,24);
-
 	ifstream file;
 	file.open("books.dat",ios::in|ios::binary);
 	while(file.read((char*)&b,sizeof(b)))
 	{
 		b.book_details();
+		getch();
 	}
 }
 void member_report()
@@ -1323,6 +1312,6 @@ void main()
 		file.open("members.dat",ios::out|ios::binary);
 		file.open("books.dat",ios::out|ios::binary);
 	}
-  	login();
+  	//login();
 	menu();
 }
