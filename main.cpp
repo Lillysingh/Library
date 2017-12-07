@@ -1,11 +1,11 @@
-#include<iostream.h>
-#include<fstream.h>
-#include<string.h>
-#include<conio.h>
-#include<stdio.h>
-#include<math.h>
-#include<stdlib.h>
-#include<time.h>
+#include <iostream.h>
+#include <fstream.h>
+#include <string.h>
+#include <conio.h>
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+#include <time.h>
 
 
 void border(char ch1, char ch2, int x, int y, int l, int b )
@@ -528,6 +528,10 @@ void menu()
 					 center("nobox","Press any key to exit system",13);
 					 ch=getch();
 					 exit(0);
+			case 8:
+					remove("members.dat");
+					remove("books.dat");
+					break;
 			default: clrscr();
 					 center("nobox","Invalid option.....",12);
 					 center("box","Press any key to go back to main menu",13);
@@ -1293,33 +1297,32 @@ void member_report()
 
 void main()
 {
+	fstream file;
 	char wait;
 	member m;
 	librarian l;
 	book b;
+	clrscr();
+	file.open("librarian.dat",ios::in|ios::binary);
 	border('*','.',0,0,80,24);
 	gotoxy(20,12);
-	cout<<"In order to start using software please enter";
-	gotoxy(20,13);
-	cout<<" one book, one member and one librarian details\n";
-	wait=getch();
-	ofstream file;
-	clrscr();
-	file.open("books.dat",ios::in|ios::binary);
-	b.input();
-	file.write((char*)&b,sizeof(b));
-	file.close();
-	clrscr();
-	file.open("members.dat",ios::in|ios::binary);
-	m.input();
-	file.write((char*)&m,sizeof(m));
-	file.close();
-	clrscr();
-	file.open("books.dat",ios::in|ios::binary);
-	l.input();
-	file.write((char*)&l,sizeof(l));
-	file.close();
-
-  //	login();
+	if(!file)
+	{
+		file.close();
+		file.open("librarian.dat",ios::out|ios::binary);
+		cout<<"In order to start using software please enter";
+		gotoxy(20,13);
+		cout<<"One librarian details\n";
+		wait=getch();
+		clrscr();
+		file.open("librarian.dat",ios::out|ios::binary);
+		l.input();
+		file.write((char*)&l,sizeof(l));
+		file.close();
+		clrscr();
+		file.open("members.dat",ios::out|ios::binary);
+		file.open("books.dat",ios::out|ios::binary);
+	}
+  	login();
 	menu();
 }
