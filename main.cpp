@@ -40,7 +40,11 @@ void border(char ch1, char ch2, int x, int y, int l, int b )
 		else cout<<ch2;
 	}
 }
-
+void align(char* word,int x=30,int y=12.5)
+{
+	gotoxy(x,y);
+	cout<<word;
+}
 void center( char opt[20], char str[80], int y )
 // opt is to decide whether a box is required or not
 {
@@ -170,7 +174,6 @@ class librarian
 
 void librarian::input()
 	{
-		char ch;
 		border('*','.',0,0,80,24);
 		center("nobox","*Enter a username and password of minimum 6 characters.",21);
 		center("nobox","*Include special characters to increase the strength. ",22);
@@ -191,7 +194,7 @@ void librarian::input()
 		center("nobox","WELCOME TO THE CULT",11);
 		center("nobox",username,12);
 		center("box","Press any key to continue",13);
-		ch=getch();
+		getch();
 	}
 
 long librarian::ret_password(int x)
@@ -242,7 +245,6 @@ class book
 void book::input()
 {
 	int addition_quantity;
-	char ch;
 	border('*','.',0,0,80,24);
 	gotoxy(20,8);
 	cout<<"Enter the book name: ";
@@ -264,7 +266,8 @@ void book::input()
 
  void book::book_details()
 {
-	char ch;
+	clrscr();
+	border('*','.',0,0,80,24);
 	center("nobox","BOOK DETAILS",10);
 	gotoxy(20,12);
 	cout<<"Book name: "<<book_name<<endl;
@@ -275,7 +278,7 @@ void book::input()
 	gotoxy(20,15);
 	cout<<"Book price: "<<book_price<<endl;
 	center("nobox","Press any key to continue",20);
-	ch=getch();
+	getch();
 }
 
 //***************************
@@ -315,7 +318,7 @@ class member
 
 void member::input()
 {
-	char ch;
+	clrscr();
 	border('*','.',0,0,80,24);
 	gotoxy(20,10);
 	cout<<"Enter the member name: ";
@@ -333,7 +336,8 @@ void member::input()
 
 void member::member_details()
 {
-	char ch;
+	clrscr();
+	border('*','.',0,0,80,24);
 	center("nobox","MEMBER DETAILS",12);
 	gotoxy(20,14);
 	cout<<"Member name: "<<mem_name<<endl;
@@ -343,7 +347,7 @@ void member::member_details()
 	cout<<"Member ID: "<<mem_id<<endl;
 	gotoxy(20,17);
 	center("nobox","Press any key to continue",20);
-	ch=getch();
+	getch();
 }
 
 //*****************
@@ -353,7 +357,6 @@ void member::member_details()
 void login()
 {
 				librarian l;
-				char ch;
 				int c=0, access_value=0;
 				char uname[100];
 				long upass[100];
@@ -385,7 +388,7 @@ void login()
 					gotoxy(3,14);
 					center("nobox","Access granted.....",14);
 					center("nobox","press any key to continue",15);
-					ch=getch();
+					getch();
 				}
 				else
 				{
@@ -394,14 +397,14 @@ void login()
 					{
 						clrscr();
 						center("box","Access denied.....you have 2 tries left. press any key to retry.",12);
-						ch=getch();
+						getch();
 						goto login_screen;
 					}
 					else if ( c==2 )
 					{
 						clrscr();
 						center("box","Access denied.....you have 1 try left. press any key to retry.",12);
-						ch=getch();
+						getch();
 						goto login_screen;
 					}
 					else exit(0);
@@ -480,8 +483,8 @@ void due_date()
 				x=x-31;
 		}
 		if(flag)
-	cout<<"Due date: "<<x<<"."<<d.tm_mon+1<<"."<<d.tm_year+1901; // next year if borrowed between 25 dec and 31 dec
-	cout<<"Due date: "<<x<<"."<<d.tm_mon+1<<"."<<d.tm_year+1900;
+	cout<<"Due date: "<<x<<"."<<(d.tm_mon+1)<<"."<<(d.tm_year+1901); // next year if borrowed between 25 dec and 31 dec
+	cout<<"Due date: "<<x<<"."<<(d.tm_mon+1)<<"."<<(d.tm_year+1900);
 }
 
 //************
@@ -490,7 +493,6 @@ void due_date()
 
 void menu()
 {
-	char ch;
 	int option;
 	do
 	{
@@ -526,7 +528,7 @@ void menu()
 			case 7:  clrscr();
 					 center("box","Have a nice day ahead.",11);
 					 center("nobox","Press any key to exit system",13);
-					 ch=getch();
+					 getch();
 					 exit(0);
 			case 8:
 					remove("members.dat");
@@ -535,7 +537,7 @@ void menu()
 			default: clrscr();
 					 center("nobox","Invalid option.....",12);
 					 center("box","Press any key to go back to main menu",13);
-					 ch=getch();
+					 getch();
 					 goto menu;
 		}
 		}while(option!=7);
@@ -548,7 +550,7 @@ void menu()
 
 void add()
 {
-	char ch1,ch;
+	char ch;
 	do
 	{	add:
 		clrscr();
@@ -569,11 +571,12 @@ void add()
 					  break;
 			case 'c': add_new_member();
 					  break;
-			case 'd': break;
+			case 'd': 
+				return;
 			default:  clrscr();
 					  center("nobox","Invalid option......",12);
 					  center("box","Press any key to go back to previous page",13);
-					  ch1=getch();
+					  getch();
 					  goto add;
 		}
 	}while(ch!='d');
@@ -581,13 +584,13 @@ void add()
 
 void add_new_librarian()
 {
-	char wait;
+	clrscr();
 	librarian l;
 	char new_username[100];
 	cout<<"Enter the username of the new librarian: ";
 	gets(new_username);
 	fstream file;
-	file.open("librarian.dat",ios::in|ios::binary|ios::app);
+	file.open("librarian.dat",ios::in|ios::binary);
 	while(file.read((char*)&l,sizeof(l)))
 	{
 		if (strcmp(new_username,l.ret_username())==0 )
@@ -596,14 +599,16 @@ void add_new_librarian()
 			center("nobox","Username or password already exists",11);
 			center("nobox","Please try another combination",12);
 			center("box","Press any key to retry : ",13);
-			wait=getch();
+			getch();
 			return;
 		}
 	}
 	l.input();
+	file.close();
+	file.open("librarian.dat",ios::app|ios::binary);
 	file.write((char*)&l,sizeof(l));
 	cout<<"Press any key to continue";
-	wait=getch();
+	getch();
 	file.close();
 }
 
@@ -611,12 +616,11 @@ void add_new_book()
 {
 	clrscr();
 	book b;
-	char wait;
 	char book_added_name[20];
 	cout<<"Enter the book name: ";
 	gets(book_added_name);
 	fstream file;
-	file.open("books.dat",ios::in|ios::binary|ios::app);
+	file.open("books.dat",ios::in|ios::binary);
 
 	while(file.read((char*)&b,sizeof(b)))
 	{
@@ -624,27 +628,29 @@ void add_new_book()
 		{
 			cout<<"Book already exists";
 			cout<<"Press any key to retry";
-			wait=getch();
+			getch();
 			return;
 		}
 	}
 	b.input();
+	file.close();
+	file.open("books.dat",ios::app|ios::binary);
 	file.write((char*)&b,sizeof(b));
 	cout<<"Press any key to continue";
-	wait=getch();
+	getch();
 	file.close();
 }
 
 
 void add_new_member()
 {
+	clrscr();
 	member m;
-	char wait;
 	int member_added_id;
 	cout<<"Enter the member id for the new member: ";
 	cin>>member_added_id;
 	fstream file;
-	file.open("member.dat",ios::in|ios::binary|ios::app);
+	file.open("members.dat",ios::in|ios::binary);
 
 	while(file.read((char*)&m,sizeof(m)))
 	{
@@ -652,14 +658,16 @@ void add_new_member()
 		{
 			cout<<"Memeber already exists";
 			cout<<"Press any key to retry";
-			wait=getch();
+			getch();
 			return;
 		}
 	}
 	m.input();
+	file.close();
+	file.open("members.dat",ios::app|ios::binary);
 	file.write((char*)&m,sizeof(m));
 	cout<<"Press any key to continue";
-	wait=getch();
+	getch();
 	file.close();
 }
 
@@ -670,7 +678,6 @@ void add_new_member()
 void search()
 {
 	int x;
-	char ch;
 	do
 	{
 		search:
@@ -693,7 +700,7 @@ void search()
 			 default: clrscr();
 					 center("nobox","Invalid option......",12);
 					  center("box","Press any key to go back to previous page",13);
-					  ch=getch();
+					  getch();
 					goto search;
 		}
 	}while(x!=3);
@@ -701,7 +708,7 @@ void search()
 
 void book_search()
 {
-	char ch1,ch;
+	char ch;
 	do
 	{
 		book_search:
@@ -727,7 +734,7 @@ void book_search()
 			default: 	clrscr();
 						center("nobox","Invalid option......",12);
 						 center("box","Press any key to go back to previous page",13);
-						 ch1=getch();
+						 getch();
 						 goto book_search;
 		}
 	}while(ch!='d');
@@ -735,7 +742,6 @@ void book_search()
 
 void book_search_id()
 {
-	char wait;
 	int id_enter,q=0;
 	book b;
 	clrscr();
@@ -759,38 +765,38 @@ void book_search_id()
 	{
 		center("nobox","BOOK NOT FOUND",12);
 		center("nobox","Press any key to retry : ",13);
-		wait=getch();
+		getch();
 	}
 }
 
 
 void book_search_name()
 {
-	 book b;
-	 int k=0;
-	 char str[20],wait;
-	 clrscr();
-	 border('%','*',0,0,80,24);
-	 center("nobox","BOOK SEARCH BY NAME",8);
-	 center("nobox","Enter the book name: ",10);
-	 gets(str);
-	  ifstream file;
-	 file.open("books.dat",ios::in|ios::binary);
-	 while(file.read((char*)&b,sizeof(b)))
-	 {
+	book b;
+	int k=0;
+	char str[20];
+	clrscr();
+	border('%','*',0,0,80,24);
+	center("nobox","BOOK SEARCH BY NAME",8);
+	center("nobox","Enter the book name: ",10);
+	gets(str);
+	ifstream file;
+	file.open("books.dat",ios::in|ios::binary);
+	while(file.read((char*)&b,sizeof(b)))
+	{
 		if(strcmp(str,b.retbook_name())==0)
 		{
 			k=1;
 			b.book_details();
 		}
-	 }
+	}
 	file.close();
 
 	if(k!=1)
 	{
 		center("nobox","BOOK NOT FOUND",12);
 		center("nobox","Press any key to retry: ",13);
-		wait=getch();
+		getch();
 	}
 }
 
@@ -798,7 +804,7 @@ void book_search_author()
 {
 	book b;
 	int k=0;
-	char str[20],wait;
+	char str[20];
 	clrscr();
 	border('%','*',0,0,80,24);
 	center("nobox","BOOK SEARCH BY AUTHOR NAME",8);
@@ -821,13 +827,13 @@ void book_search_author()
 	{
 		center("nobox","BOOK NOT FOUND",12);
 		center("nobox","Press any key to retry: ",13);
-		wait=getch();
+		getch();
 	}
 }
 
 void member_search()
 {
-	char ch1,ch;
+	char ch;
 	do
 	{
 		member_search:
@@ -850,7 +856,7 @@ void member_search()
 			default : clrscr();
 					  center("nobox","Invalid option......",12);
 					  center("box","Press any key to go back to previous page",13);
-					  ch1=getch();
+					  getch();
 					  goto member_search;
 		}
 	}while(ch!='c');
@@ -858,7 +864,6 @@ void member_search()
 
 void member_search_id()
 {
-	char wait;
 	int x=0,mem_id_enter;
 	member m;
 	clrscr();
@@ -882,13 +887,12 @@ void member_search_id()
 	{
 		center("nobox","MEMBER DOES NOT EXIST",12);
 		center("nobox","Press any key to retry: ",13);
-		wait=getch();
+		getch();
 	}
 }
 
 void member_search_telephone()
 {
-	char wait;
 	int x=0,mem_telno_enter;
 	member m;
 	clrscr();
@@ -912,7 +916,7 @@ void member_search_telephone()
 	{
 		center("nobox","MEMBER DOES NOT EXIST",12);
 		center("nobox","Press any key to retry: ",13);
-		wait=getch();
+		getch();
 	}
 }
 
@@ -924,7 +928,7 @@ void issue_book()
 	member m;
 	book b;
 	int book_found=0, member_found=0, member_book_issue_id;
-	char book_issued[20], wait;
+	char book_issued[20];
 
 	clrscr();
 	border('~','-',0,0,80,24);
@@ -962,25 +966,25 @@ void issue_book()
 		b.qty(-1);
 		center("nobox","Book has been successfully borrowed",12);
 		center("nobox","Press any key to view details",13);
-		wait=getch();
+		getch();
 		clrscr();
 		border('.','#',0,0,80,24);
 		center("nobox","STATUS",4);
 		center("nobox","~~~~~~~~~~~~~~~~~~~~",6);
-		center("nobox","Book name: ",8);
+		align("Book name: ",30,8);
 		cout<<b.retbook_name();
-		center("nobox","Book author: ",10);
+		align("Book author: ",30,10);
 		cout<<b.retbook_author();
-		center("nobox","Book price: ",12);
+		align("Book price: ",30,12);
 		cout<<b.retbook_price();
-		center("nobox","Member name: ",14);
+		align("Member name: ",30,14);
 		cout<<m.retmem_name();
-		center("nobox"," ID of book borrowed: ",16);
+		align(" ID of book borrowed: ",30,16);
 		cout<<m.retmem_book_id();
-		gotoxy(20,18);
+		gotoxy(30,18);
 		due_date();
 		center("nobox","Press any key to continue",20);
-		wait=getch();
+		getch();
 	}
 
 	else if(!book_found)
@@ -988,14 +992,14 @@ void issue_book()
 		clrscr();
 		center("box","Book not found",12);
 		center("nobox","Press any key to retry",14);
-		wait=getch();
+		getch();
 	}
 	else if(!member_found)
 	{
 		clrscr();
 		center("box","Member does not exist",12);
 		center("nobox","Press any key to retry",14);
-		wait=getch();
+		getch();
 	}
 
 	mfile.close();
@@ -1010,7 +1014,7 @@ void return_book()
 	member m;
 	book b;
 	int member_book_issue_id,book_match=0,id_match=0;
-	char book_issued[20], wait;
+	char book_issued[20];
 
 	clrscr();
 	border('~','-',0,0,80,24);
@@ -1051,14 +1055,14 @@ void return_book()
 		clrscr();
 		center("box","This book doesn't belong to this library",12);
 		center("nobox","Press any key to retry",14);
-		wait=getch();
+		getch();
 	}
 	else if(!id_match)
 	{
 		clrscr();
 		center("box","Member does not exist",12);
 		center("nobox","Press any key to retry",14);
-		wait=getch();
+		getch();
 	}
 }
 
@@ -1069,7 +1073,6 @@ void return_book()
 void remove()
 {
 	int x;
-	char ch;
 	do
 	{
 		report:
@@ -1092,7 +1095,7 @@ void remove()
 			 default: clrscr();
 					 center("nobox","Invalid option......",12);
 					  center("box","Press any key to go back to previous page",13);
-					  ch=getch();
+					  getch();
 					goto report;
 		}
 	}while(x!=3);
@@ -1100,7 +1103,6 @@ void remove()
 
 void remove_book()
 {
-	char wait;
 	member m;
 	book b;
 	int member_book_issue_id,book_match=0,id_match=0;
@@ -1164,14 +1166,14 @@ void remove_book()
 		clrscr();
 		center("box","This book doesn't belong to this library",12);
 		center("nobox","Press any key to retry",14);
-		wait=getch();
+		getch();
 	}
 	else if(!id_match)
 	{
 		clrscr();
 		center("box","Member does not exist",12);
 		center("nobox","Press any key to retry",14);
-		wait=getch();
+		getch();
 	}
 }
 
@@ -1179,7 +1181,6 @@ void remove_member()
 {
 	member m;
 	int member_book_issue_id;
-	char wait;
 	clrscr();
 	border('~','-',0,0,80,24);
 	center("nobox","REMOVE MEMBER",4);
@@ -1201,7 +1202,7 @@ void remove_member()
 			rename("temp.dat","members.dat");
 			center("nobox","MEMBER HAS BEEN REMOVED",8);
 			center("nobox","Press any key to return",13);
-			wait=getch();
+			getch();
 			break;
 		}
 
@@ -1211,7 +1212,7 @@ void remove_member()
 			center("nobox","Member can't be removed ",11);
 			center("nobox","till book is returned",12);
 			center("nobox","Press any key to return",13);
-			wait=getch();
+			getch();
 			break;
 		}
 	}
@@ -1224,7 +1225,6 @@ void remove_member()
 void report()
 {
 	int x;
-	char ch;
 	do
 	{
 		report:
@@ -1247,7 +1247,7 @@ void report()
 			 default: clrscr();
 					 center("nobox","Invalid option......",12);
 					  center("box","Press any key to go back to previous page",13);
-					  ch=getch();
+					  getch();
 					goto report;
 		}
 	}while(x!=3);
@@ -1277,6 +1277,7 @@ void member_report()
 	while(file.read((char*)&m,sizeof(m)))
 	{
 		m.member_details();
+		getch();
 	}
 }
 
@@ -1287,10 +1288,7 @@ void member_report()
 void main()
 {
 	fstream file;
-	char wait;
-	member m;
 	librarian l;
-	book b;
 	clrscr();
 	file.open("librarian.dat",ios::in|ios::binary);
 	border('*','.',0,0,80,24);
@@ -1302,15 +1300,12 @@ void main()
 		cout<<"In order to start using software please enter";
 		gotoxy(20,13);
 		cout<<"One librarian details\n";
-		wait=getch();
+		getch();
 		clrscr();
 		file.open("librarian.dat",ios::out|ios::binary);
 		l.input();
 		file.write((char*)&l,sizeof(l));
 		file.close();
-		clrscr();
-		file.open("members.dat",ios::out|ios::binary);
-		file.open("books.dat",ios::out|ios::binary);
 	}
   	//login();
 	menu();
